@@ -2,18 +2,23 @@ package com.springboot.news_;
 
 import com.springboot.news_.dao.UserDao;
 import com.springboot.news_.entity.NewsUser;
+import com.springboot.news_.serviceDao.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 class NewsApplicationTests {
     @Autowired
-    UserDao userDao;
+    UserService userService;
     @Test
     void contextLoads() {
-        NewsUser user= userDao.FindUser ("admin","admin");
-        System.out.println(user.getId ()+" "+user.getUserName ());
+   /*     NewsUser list= userService.FindAll ();
+       for(NewsUser a:list){
+           System.out.println(a.getUserName ());
+       }*/
     }
 
 }
