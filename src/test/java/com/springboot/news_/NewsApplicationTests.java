@@ -15,10 +15,10 @@ class NewsApplicationTests {
     UserService userService;
     @Test
     void contextLoads() {
-   /*     NewsUser list= userService.FindAll ();
+       List<NewsUser>list= userService.FindAll ();
        for(NewsUser a:list){
            System.out.println(a.getUserName ());
-       }*/
+       }
     }
 
 }
