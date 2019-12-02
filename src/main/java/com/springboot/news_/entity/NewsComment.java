@@ -1,4 +1,4 @@
-package com.sample;
+package com.springboot.news_.entity;
 
 
 public class NewsComment {
