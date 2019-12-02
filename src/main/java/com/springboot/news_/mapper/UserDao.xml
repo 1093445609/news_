@@ -1,0 +1,25 @@
+<!--
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+&lt;!&ndash; mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 &ndash;&gt;
+<mapper namespace="com.springboot.news_.dao.UserDao">
+    &lt;!&ndash; statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
+      resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
+    &ndash;&gt;
+    <resultMap id="list" type="com.springboot.news_.entity.NewsUser">
+        <id column="id" jdbcType="int" property="id" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="password" jdbcType="varchar" property="password" />
+        <collection property="id" ofType="com.springboot.news_.entity.NewsUser" >
+            <id column="id" jdbcType="int" property="id" />
+            <result column="userName" jdbcType="VARCHAR" property="userName" />
+            <result column="password" jdbcType="VARCHAR" property="password" />
+        </collection>
+    </resultMap
+    <select id="FindAll"  resultType="com.springboot.news_.entity.NewsUser" resultMap="">
+        select * from news_user ;
+    </select>
+</mapper>
+-->
