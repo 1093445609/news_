@@ -9,4 +9,5 @@ import java.util.List;
 public interface UserService {
 
     public List<NewsUser> FindAll();
+    public  NewsUser FindUser(NewsUser newsUser);
 }

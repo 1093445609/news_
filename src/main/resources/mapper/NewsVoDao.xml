@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.springboot.news_.dao.NewsVoDao">
+    <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
+      resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
+    -->
+<sql id="voWhere">
+    <where>
+
+        <if test="#{search}!=null">
+            or a.title  like Concat('%',#{search},'%')
+        </if>
+        <if test="#{search}!=null">
+            or a.content like  Concat('%',#{search},'%')
+        </if>
+        <if test="#{id}!=null">
+            and  b.id=#{id}
+        </if>
+    </where>
+
+</sql>
+    <select id="FindAll" resultType="com.springboot.news_.vo.NewsVo">
+SELECT b.name AS  newsType,a.title,a.summary,a.content,a.picPath,a.author, a.modifyDate
+FROM news_detail  a
+LEFT JOIN news_category  b
+ON  a.categoryId=b.id
+<include refid="voWhere"></include>
+ORDER BY a.modifyDate DESC;
+
+
+    </select>
+</mapper>
