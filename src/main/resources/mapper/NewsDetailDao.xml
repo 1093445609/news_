@@ -8,8 +8,8 @@
       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
     -->
 
-    <select id="getLatestNews_details" resultType="com.springboot.news_.entity.NewsDetail" parameterType="integer">
-        SELECT *FROM news_detail  where categoryId=2 ORDER BY modifyDate DESC  LIMIT 0,5;
+    <select id="getLatestNews_details" resultType="com.springboot.news_.entity.NewsDetail" parameterType="integer" >
+        SELECT *FROM news_detail  <if test="categoryId !=1">  where categoryId=#{categoryId} </if>  ORDER BY modifyDate DESC  LIMIT 0,8;
 
 
     </select>
@@ -18,7 +18,7 @@
 
 
     <select id="getNews_detailById" resultType="com.springboot.news_.entity.NewsDetail">
-         SELECT *FROM news_detail   where id=#{id}
+         SELECT *FROM news_detail   where id=${id}
 
     </select>
 </mapper>

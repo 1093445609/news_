@@ -11,8 +11,23 @@
 <html>
 <head>
     <title>首页</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <%--js路径需要绝对路径 否则当后台跳转后找不到文件路径--%>
+    <%
+        String path = request.getContextPath();
+        String basePath = request.getScheme() + "://"
+                + request.getServerName() + ":" + request.getServerPort()
+                + path + "/";
+    %>
 
+    <link href="<%=basePath%>bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <%--<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+--%>
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="<%=basePath%>bootstrap/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -93,16 +108,22 @@
                     <c:otherwise> ${user.userName},您好!</c:otherwise></c:choose>
 
                     <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">全部</a></li>
-                <li><a href="#">国内</a></li>
-                <li><a href="#">国际</a></li>
-            </ul>
+
+                <c:forEach items="${categoryLists}" var="clist">
+                    <li><a href="/index/${clist.id}?categoryId=${clist.id}"> ${clist.name} </a></li>
+                </c:forEach>
+                    <%--<li><a href="/index/${user.id}">全部</a></li>
+                       <li><a href="/index/id=2">国内</a></li>
+                            <li><a href="/index/id=3">国际</a></li>--%>
+
+
+          <%--  </ul>
             <ul class="nav nav-sidebar" style="margin:0 0 300px 0">
-                <li><a href="">娱乐</a></li>
-                <li><a href="">军事</a></li>
-                <li><a href="">财经</a></li>
-                <li><a href="">天气</a></li>
-            </ul>
+                <li><a href="/index/id=4">娱乐</a></li>
+                <li><a href="/index/id=5">军事</a></li>
+                <li><a href="/index/id=6">财经</a></li>
+                <li><a href="/index/id=7">天气</a></li>
+            </ul>--%>
             <ul class="nav nav-sidebar">
                 <li><a href="#"> 管理系统</a></li>
                 <li></li>
@@ -122,13 +143,16 @@
                 <div class="panel panel-default">
                     <%--内容块--%>
                     <div id="content" class="panel-heading">
+
+                    </div>
+                        <c:if test="${!empty articleLists}">
                         <c:forEach items="${articleLists}" var="list" varStatus="i">
                             <p>
                                 <a href="">${i.count} ${list.title} ${list.summary}&nbsp;&nbsp;&nbsp;<small> ${list.modifyDate}</small>
                                     &nbsp; &nbsp;&nbsp;&nbsp;${cid}</a></p>
 
                         </c:forEach>
-                    </div>
+                        </c:if>
                 </div>
             </div>
 
@@ -182,14 +206,7 @@
 
 </div>
 
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
-
-<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
 <%--当你点击登陆按钮 div内容改为登陆表单--%>
 <script type="text/javascript">
     var divA = document.getElementById("content");
@@ -232,8 +249,8 @@
 $(document).change(function () {
     var divA = document.getElementById("content")
     $("#getLogin").click(function () {
-        var user = $("#username").val();
-        var password = $("#password").val();
+        var user = $("#username").val;
+        var password = $("#password").val;
         if (user == "") {
             alert("用户名不可为空!");
         } else if (password == "") {
@@ -256,7 +273,7 @@ $(document).change(function () {
                     } else {
                         //divA.innerHTML = '欢迎登陆!';跳转了登陆所以不能显示
                         alert("登陆成功!");
-                        window.location.href = "/index";//跳转链接
+                        window.location.href = "/";//跳转链接
 
                     }
                 },

@@ -22,7 +22,7 @@ public class CategoryController {
     public  String getNews_categorys(Model model){
         List<NewsCategory> list=categoryService.getNews_categorys ();
         model.addAttribute ("list",list);
-        return list.toString ();
+        return list.get (1).getId ()+"";
     }
     @RequestMapping("/categorybyid")
     public  String getNews_categoryById(Model model,Integer id){
