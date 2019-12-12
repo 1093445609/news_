@@ -8,10 +8,11 @@ import com.springboot.news_.entity.NewsUser;
 import com.springboot.news_.serviceDao.CategoryService;
 import com.springboot.news_.serviceDao.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -41,7 +42,7 @@ public class UserController {
            categoryId = Integer.parseInt (category); //默认新闻分类是全部
              }
         /*搜索内容*/
-     
+
 
             List<NewsDetail> list = newsdetailDao.getLatestNews_details (categoryId, start, size,search);
             NewsCategory newsCategory = categoryService.getNews_categoryById (categoryId);

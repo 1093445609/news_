@@ -13,8 +13,8 @@
         <where>
 
             <if test="search!=null and search!='' "> or title LIKE CONCAT(CONCAT('%', #{search}), '%') </if>
-            <!--<if test="search!=1"> or summary=#{search}  </if>
-            <if test="search!=1"> or content=#{search}  </if>-->
+            <if test="search!=null and search!='' "> or summary LIKE CONCAT(CONCAT('%', #{search}), '%') </if>
+            <if test="search!=null and search!='' "> or content LIKE CONCAT(CONCAT('%', #{search}), '%') </if>
             <if test="categoryId !=1"> and categoryId=#{categoryId}</if>
         </where>
         ORDER BY modifyDate DESC LIMIT 0,8;
