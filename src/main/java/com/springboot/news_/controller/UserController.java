@@ -29,90 +29,67 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("/")
-    public String FirstJsp(Model model) {
-        Integer start = 0;
-        Integer size = 5;
-       // String category = request.getParameter ("categoryId");
-        Integer categoryId = 1;
-
-        List<NewsDetail> list = newsdetailDao.getLatestNews_details (categoryId, start, size);
-        NewsCategory newsCategory = categoryService.getNews_categoryById (1);
-        model.addAttribute ("articleLists", list);
-        model.addAttribute ("cid", newsCategory.getName ( ));
-        List<NewsCategory> categoryLists = categoryService.getNews_categorys ( );
-        model.addAttribute ("categoryLists", categoryLists);
-        return "index";
-
-    }
-
-    @RequestMapping("/index")
-    public String FindUserController(Model model,HttpServletRequest request) {
-
-        Integer start = 0;
+    public String FirstJsp(Model model, HttpServletRequest request) {
+        Integer start = 0;//本来想着做分页的 不用插件又觉得麻烦所以...
         Integer size = 5;
         String category = request.getParameter ("categoryId");
-        Integer categoryId = Integer.parseInt (category);
-
-        List<NewsDetail> list = newsdetailDao.getLatestNews_details (categoryId, start, size);
-        NewsCategory newsCategory = categoryService.getNews_categoryById (1);
-        model.addAttribute ("articleLists", list);
-        model.addAttribute ("cid", newsCategory.getName ( ));
-        List<NewsCategory> categoryLists = categoryService.getNews_categorys ( );
-        model.addAttribute ("categoryLists", categoryLists);
-        return "index";
-
-    }
-
-    @RequestMapping("/index/{id}")
-    public String FindUserControllerbyid(Model model, @PathVariable("id") Integer id, HttpServletRequest request) {
-        String category = request.getParameter ("categoryId");
-        System.out.println (category);
-        Integer categoryId = Integer.parseInt (category);
-        Integer start = 0;
-        Integer size = 5;
-        List<NewsDetail> list = newsdetailDao.getLatestNews_details (categoryId, start, size);
-        NewsCategory newsCategory = categoryService.getNews_categoryById (id);
-        model.addAttribute ("articleLists", list);
-        model.addAttribute ("cid", newsCategory.getName ( ));
-        List<NewsCategory> categoryLists = categoryService.getNews_categorys ( );
-        model.addAttribute ("categoryLists", categoryLists);
-        return "index";
-
-    }
-
-    @ResponseBody   //json
-    @RequestMapping(value = "/logins", method = RequestMethod.POST)
-    public String findUser(Model model, HttpServletRequest request) {
-        String username = request.getParameter ("username");
-        String password = request.getParameter ("password");
-        NewsUser user = new NewsUser ( );
-        user.setUserName (username);
-        user.setPassword (password);
-        Map<String, Object> map = new HashMap<> ( );
-
-        NewsUser newsUser = userService.FindUser (user);
-        if (null == newsUser || newsUser.getId ( ) <= 0) {
-            map.put ("code", "0");
-            map.put ("msg", "账号或者密码错误");
-            request.getSession ( ).setAttribute ("user", null);
+        String search = request.getParameter ("search");
+        Integer categoryId;
+        if (category == null) {
+            categoryId=1;
         } else {
-            map.put ("code", "1");
-            map.put ("msg", "");
-            request.getSession ( ).setAttribute ("user", newsUser);//查到的用户储存
+           categoryId = Integer.parseInt (category); //默认新闻分类是全部
+             }
+        /*搜索内容*/
+     
+
+            List<NewsDetail> list = newsdetailDao.getLatestNews_details (categoryId, start, size,search);
+            NewsCategory newsCategory = categoryService.getNews_categoryById (categoryId);
+            model.addAttribute ("articleLists", list);
+            model.addAttribute ("cid", newsCategory.getName ( ));
+            List<NewsCategory> categoryLists = categoryService.getNews_categorys ( );
+            model.addAttribute ("categoryLists", categoryLists);
+            return "index";
+
         }
-        /*map转字符串对象*/
-        String result = new JSONObject (map).toString ( );
-        return result;
+        /*
+         * 登陆验证
+         * */
+        @ResponseBody   //json
+        @RequestMapping(value = "/logins", method = RequestMethod.POST)
+        public String findUser (Model model, HttpServletRequest request){
+            String username = request.getParameter ("username");
+            String password = request.getParameter ("password");
+            NewsUser user = new NewsUser ( );
+            user.setUserName (username);
+            user.setPassword (password);
+            Map<String, Object> map = new HashMap<> ( );
+
+            NewsUser newsUser = userService.FindUser (user);
+            if (null == newsUser || newsUser.getId ( ) <= 0) {
+                map.put ("code", "0");
+                map.put ("msg", "账号或者密码错误");
+                request.getSession ( ).setAttribute ("user", null);
+            } else {
+                map.put ("code", "1");
+                map.put ("msg", "");
+                request.getSession ( ).setAttribute ("user", newsUser);//查到的用户储存
+            }
+            /*map转字符串对象*/
+            String result = new JSONObject (map).toString ( );
+            return result;
+
+        }
+        /*
+         * 退出登陆 将session移出
+         * */
+        @RequestMapping("/logout")
+        public String logout (HttpSession session){
+            session.removeAttribute ("user");
+            session.invalidate ( );
+            return "redirect:/";
+
+
+        }
 
     }
-
-    @RequestMapping("/logout")
-    public String logout(HttpSession session) {
-        session.removeAttribute ("user");
-        session.invalidate ( );
-        return "redirect:/";
-
-
-    }
-
-}

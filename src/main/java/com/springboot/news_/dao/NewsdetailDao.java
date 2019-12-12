@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 public interface NewsdetailDao {
     /*获取最新新闻*/
-    List<NewsDetail> getLatestNews_details(@Param ("categoryId") Integer id, Integer start, Integer limit );
+    List<NewsDetail> getLatestNews_details(@Param ("categoryId") Integer id, Integer start, Integer limit,@Param ("search") String search );
 /*根据id 查*/
     NewsDetail getNews_detailById(Integer id);
 }

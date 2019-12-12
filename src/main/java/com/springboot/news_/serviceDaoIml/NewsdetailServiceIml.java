@@ -14,8 +14,8 @@ public class NewsdetailServiceIml implements NewsdetailService {
     NewsdetailDao newsdetailDao;
 
     @Override
-    public List<NewsDetail> getLatestNews_details(Integer id,Integer start, Integer size) {
-        return newsdetailDao.getLatestNews_details (id,start, size);
+    public List<NewsDetail> getLatestNews_details(Integer id,Integer start, Integer size,String search) {
+        return newsdetailDao.getLatestNews_details (id,start, size,search);
     }
 
     @Override

@@ -18,14 +18,14 @@
                 + request.getServerName() + ":" + request.getServerPort()
                 + path + "/";
     %>
-
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <link href="<%=basePath%>bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <%--<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 --%>
 
-    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+
     <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
     <script src="<%=basePath%>bootstrap/js/bootstrap.min.js"></script>
 
@@ -47,7 +47,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form navbar-left">
+            <form id="searchFrom" class="navbar-form navbar-left">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -70,9 +70,9 @@
 
                 <div class="form-group">
                     <%--搜索框--%>
-                    <input type="text" class="form-control" placeholder="Search" id="search" name="search">
+                    <input type="text" class="form-control" placeholder="Search" id="searchContext" name="search">
                 </div>
-                <button type="submit" class="btn btn-success">搜索一下新闻</button>
+                <button type="submit" id="searchNews"   class="btn btn-success">搜索一下新闻</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -110,20 +110,9 @@
                     <span class="sr-only">(current)</span></a></li>
 
                 <c:forEach items="${categoryLists}" var="clist">
-                    <li><a href="/index/${clist.id}?categoryId=${clist.id}"> ${clist.name} </a></li>
+                    <li><a href="/?categoryId=${clist.id}"> ${clist.name} </a></li>
                 </c:forEach>
-                    <%--<li><a href="/index/${user.id}">全部</a></li>
-                       <li><a href="/index/id=2">国内</a></li>
-                            <li><a href="/index/id=3">国际</a></li>--%>
 
-
-          <%--  </ul>
-            <ul class="nav nav-sidebar" style="margin:0 0 300px 0">
-                <li><a href="/index/id=4">娱乐</a></li>
-                <li><a href="/index/id=5">军事</a></li>
-                <li><a href="/index/id=6">财经</a></li>
-                <li><a href="/index/id=7">天气</a></li>
-            </ul>--%>
             <ul class="nav nav-sidebar">
                 <li><a href="#"> 管理系统</a></li>
                 <li></li>
@@ -143,8 +132,8 @@
                 <div class="panel panel-default">
                     <%--内容块--%>
                     <div id="content" class="panel-heading">
-
                     </div>
+
                         <c:if test="${!empty articleLists}">
                         <c:forEach items="${articleLists}" var="list" varStatus="i">
                             <p>
@@ -153,6 +142,7 @@
 
                         </c:forEach>
                         </c:if>
+
                 </div>
             </div>
 
@@ -231,6 +221,7 @@
         })
 
 
+
     })
     $(document).ready(function () {
         $("#logout").click(function () {
@@ -287,7 +278,11 @@ $(document).change(function () {
 
     })
 })
+$("#searchNews").click(function () {
+        window.location.href='/'
 
+
+    })
 
 </script>
 
