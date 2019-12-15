@@ -9,8 +9,11 @@ import java.util.List;
 @Mapper
 @Component
 public interface NewsdetailDao {
-    /*获取最新新闻*/
-    List<NewsDetail> getLatestNews_details(@Param ("categoryId") Integer id, Integer start, Integer limit,@Param ("search") String search );
-/*根据id 查*/
+    /*查询搜索框 分类和查找内容*/
+
+    List<NewsDetail> getLatestNews_details(@Param ("categoryId") Integer id,@Param ("search") String search );
+    /*根据id 查*/
     NewsDetail getNews_detailById(Integer id);
+    /*总数*/
+    Integer getNewsCount(@Param ("categoryId") Integer id,@Param ("search") String search );
 }

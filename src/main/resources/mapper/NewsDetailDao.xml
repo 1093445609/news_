@@ -8,16 +8,17 @@
       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
     -->
 
-    <select id="getLatestNews_details" resultType="com.springboot.news_.entity.NewsDetail"  >
+    <select id="getLatestNews_details" resultType="com.springboot.news_.entity.NewsDetail">
         SELECT *FROM news_detail
         <where>
-
-            <if test="search!=null and search!='' "> or title LIKE CONCAT(CONCAT('%', #{search}), '%') </if>
-            <if test="search!=null and search!='' "> or summary LIKE CONCAT(CONCAT('%', #{search}), '%') </if>
-            <if test="search!=null and search!='' "> or content LIKE CONCAT(CONCAT('%', #{search}), '%') </if>
-            <if test="categoryId !=1"> and categoryId=#{categoryId}</if>
+            <if test="search!=null and search!=''">(</if>
+            <if test="search!=null and search!='' ">title LIKE CONCAT(CONCAT('%', #{search}), '%')</if>
+            <if test="search!=null and search!='' ">or summary LIKE CONCAT(CONCAT('%', #{search}), '%')</if>
+            <if test="search!=null and search!='' ">or content LIKE CONCAT(CONCAT('%', #{search}), '%')</if>
+            <if test="search!=null and search!=''">)</if>
+            <if test="categoryId !=1">and categoryId=#{categoryId}</if>
         </where>
-        ORDER BY modifyDate DESC LIMIT 0,8;
+        ORDER BY modifyDate DESC ;
 
 
     </select>
@@ -27,4 +28,20 @@
          SELECT *FROM news_detail   where id=${id}
 
     </select>
+    <select id="getNewsCount" resultType="java.lang.Integer">
+        SELECT count("id") FROM news_detail
+        <where>
+            <if test="search!=null and search!=''">(</if>
+            <if test="search!=null and search!='' ">title LIKE CONCAT(CONCAT('%', #{search}), '%')</if>
+            <if test="search!=null and search!='' ">or summary LIKE CONCAT(CONCAT('%', #{search}), '%')</if>
+            <if test="search!=null and search!='' ">or content LIKE CONCAT(CONCAT('%', #{search}), '%')</if>
+            <if test="search!=null and search!=''">)</if>
+
+            <if test="categoryId !=1"> and categoryId=#{categoryId}
+            </if>
+        </where>
+
+
+    </select>
+
 </mapper>

@@ -6,6 +6,7 @@ import com.springboot.news_.entity.NewsCategory;
 import com.springboot.news_.entity.NewsDetail;
 import com.springboot.news_.entity.NewsUser;
 import com.springboot.news_.serviceDao.CategoryService;
+import com.springboot.news_.serviceDao.NewsdetailService;
 import com.springboot.news_.serviceDao.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,35 +24,47 @@ import java.util.Map;
 @Controller
 public class UserController {
     @Autowired(required = true)
-    NewsdetailDao newsdetailDao;
+    NewsdetailService newsdetailService;
     @Autowired
     CategoryService categoryService;
     @Autowired
     UserService userService;
-
+    @Autowired
+    NewsdetailDao newsdetailDao;
     @RequestMapping("/")
     public String FirstJsp(Model model, HttpServletRequest request) {
-        Integer start = 0;//本来想着做分页的 不用插件又觉得麻烦所以...
-        Integer size = 5;
         String category = request.getParameter ("categoryId");
         String search = request.getParameter ("search");
-        Integer categoryId;
-        if (category == null) {
-            categoryId=1;
-        } else {
+        String currPages=request.getParameter ("currPage");
+        Integer categoryId=1;//默认主题 全部
+        Integer currPage=1;//默认分页 第一页
+        Integer pageSize=3;//分页size
+
+
+        if (category != null) {
            categoryId = Integer.parseInt (category); //默认新闻分类是全部
              }
+
+        Integer count= newsdetailDao.getNewsCount (categoryId,search);//新闻总数
+
+
+        Integer pageCount=count%pageSize;//总条数是否可以除尽size 如果整除则为页数 除不尽+1
+        Integer pageCounts=pageCount==0?count/pageSize:count/pageSize+1;//总页数的计算
+        if (currPages!=null){     //防止越界异常,这个主要是为了做跳转输入指定页数时防止错误,这里就不做了
+            Integer p= Integer.parseInt (currPages);//传过来的当前页数
+            currPage=p<=1?1:p>pageCounts?pageCounts:p;//假如传过来的不大于1则设为当前第1页否则看是否大于总页数..
+
+        }
+        model.addAttribute ("pageCounts",pageCounts);
+        model.addAttribute ("currPage",currPage);
         /*搜索内容*/
-
-
-            List<NewsDetail> list = newsdetailDao.getLatestNews_details (categoryId, start, size,search);
+            List<NewsDetail> list = newsdetailService.getLatestNews_details (categoryId,search,currPage,pageSize);
             NewsCategory newsCategory = categoryService.getNews_categoryById (categoryId);
             model.addAttribute ("articleLists", list);
-            model.addAttribute ("cid", newsCategory.getName ( ));
+            model.addAttribute ("cid", newsCategory);
             List<NewsCategory> categoryLists = categoryService.getNews_categorys ( );
             model.addAttribute ("categoryLists", categoryLists);
             return "index";
-
         }
         /*
          * 登陆验证
@@ -65,7 +78,6 @@ public class UserController {
             user.setUserName (username);
             user.setPassword (password);
             Map<String, Object> map = new HashMap<> ( );
-
             NewsUser newsUser = userService.FindUser (user);
             if (null == newsUser || newsUser.getId ( ) <= 0) {
                 map.put ("code", "0");

@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 @Component
 public interface CategoryDao {
-    /*获取主题列表*/
+    /*获取主题列表,如国际 国内 娱乐*/
     public List<NewsCategory> getNews_categorys();
     /*根据主题id获得主题实体对象*/
     public NewsCategory getNews_categoryById(Integer id);

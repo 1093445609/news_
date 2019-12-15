@@ -14,8 +14,14 @@ public class NewsdetailServiceIml implements NewsdetailService {
     NewsdetailDao newsdetailDao;
 
     @Override
-    public List<NewsDetail> getLatestNews_details(Integer id,Integer start, Integer size,String search) {
-        return newsdetailDao.getLatestNews_details (id,start, size,search);
+    public List<NewsDetail> getLatestNews_details(Integer id,String search,int currPage, int pageSize) {
+        int firstIndex=(currPage-1)*pageSize;//分页开始数据
+        int lastIndex=currPage*pageSize;//当前页从1开始,截至页数*每页数据
+       Integer count= newsdetailDao.getNewsCount (id,search);//新闻总数
+        if (lastIndex>count){
+            lastIndex=count;
+        }
+        return newsdetailDao.getLatestNews_details (id,search).subList (firstIndex,lastIndex);
     }
 
     @Override

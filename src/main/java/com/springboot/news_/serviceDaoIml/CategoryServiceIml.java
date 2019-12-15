@@ -11,13 +11,14 @@ import java.util.List;
 public class CategoryServiceIml implements CategoryService {
     @Autowired
     CategoryDao categoryDao;//注册接口实例
+    /*获得主题列表*/
     @Override
     public List<NewsCategory> getNews_categorys() {
         return categoryDao.getNews_categorys ();
     }
 
 
-
+/*根据id获取主题*/
     @Override
     public NewsCategory getNews_categoryById(Integer id) {
         return categoryDao.getNews_categoryById (id);

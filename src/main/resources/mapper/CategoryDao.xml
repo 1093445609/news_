@@ -7,13 +7,14 @@
     <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
     -->
-
+<!--主题列表-->
     <select id="getNews_categorys" resultType="com.springboot.news_.entity.NewsCategory">
-        select *from news_category
+        select name,id from news_category
 
 
     </select>
+    <!--估计id-->
     <select id="getNews_categoryById" resultType="com.springboot.news_.entity.NewsCategory" parameterType="integer">
-            select * from news_category where id=#{id}
+            select name,id from news_category where id=#{id}
     </select>
 </mapper>

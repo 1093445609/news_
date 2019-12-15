@@ -138,10 +138,54 @@
                         <c:forEach items="${articleLists}" var="list" varStatus="i">
                             <p>
                                 <a href="">${i.count} ${list.title} ${list.summary}&nbsp;&nbsp;&nbsp;<small> ${list.modifyDate}</small>
-                                    &nbsp; &nbsp;&nbsp;&nbsp;${cid}</a></p>
+                                    &nbsp; &nbsp;&nbsp;&nbsp;${cid.name}</a></p>
 
                         </c:forEach>
-                        </c:if>
+                            <hr/>
+                            <hr/>
+                            <a href="/?currPage=${currPage-1}&categoryId=${cid.id }">[上一页]</a>
+                            <c:choose>
+                            <c:when test="${pageCounts>=3&&currPage<=3}"><c:forEach  begin="1" end="3" step="1" var="i2">
+                                    <a href="/?currPage=${i2}&categoryId=${cid.id }">[第${i2}页]</a>
+                                </c:forEach>
+                            </c:when>
+                                <c:when test="${currPage>pageCounts-3}">
+                                    <c:forEach begin="${pageCounts-2}" end="${pageCounts}" step="1" var="i3">
+                                        <a href="/?currPage=${i3}&categoryId=${cid.id }">[第${i3}页]</a>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach begin="${currPage-1}" end="${currPage+1}" step="1" var="i4">
+                                        <a href="/?currPage=${i4}&categoryId=${cid.id }">[第${i4}页]</a>
+                                    </c:forEach>
+
+                                </c:otherwise>
+                            </c:choose>
+                           <%-- <c:when test="${currPage}>=${pageCounts}">
+                                <c:forEach var="p2" begin="${currPage-1}" end="${pageCounts}" step="1" >
+                                    <a href="/?currPage=${p2}&categoryId=${cid.id }">第${p2}页</a>
+                                </c:forEach>
+
+                            </c:when>--%>
+
+                             <%--   <c:forEach var="i" begin="1" end="${pageCounts}" step="1">
+                                    <a href="/?currPage=${i}&categoryId=${cid.id }">第${i}页</a>
+
+                                </c:forEach>--%>
+
+
+
+
+                            <a href="/?currPage=${currPage+1}&categoryId=${cid.id }">[下一页]</a>
+                            <a href="/?currPage=-1&categoryId=${cid.id }">测试</a>
+                            <span>>>>>>当前第${currPage}页</span>
+                            <span>总共${pageCounts}页</span>
+
+                    </c:if>
+
+
+
+
 
                 </div>
             </div>
@@ -278,7 +322,7 @@ $(document).change(function () {
 
     })
 })
-$("#searchNews").click(function () {
+$("#-searchNews").click(function () {
         window.location.href='/'
 
 
