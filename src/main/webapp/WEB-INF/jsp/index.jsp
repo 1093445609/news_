@@ -13,9 +13,9 @@
     <title>首页</title>
     <%--js路径需要绝对路径 否则当后台跳转后找不到文件路径--%>
     <%
-        String path = request.getContextPath();
-        String basePath = request.getScheme() + "://"
-                + request.getServerName() + ":" + request.getServerPort()
+        String path = request.getContextPath ( );
+        String basePath = request.getScheme ( ) + "://"
+                + request.getServerName ( ) + ":" + request.getServerPort ( )
                 + path + "/";
     %>
     <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
@@ -72,7 +72,7 @@
                     <%--搜索框--%>
                     <input type="text" class="form-control" placeholder="Search" id="searchContext" name="search">
                 </div>
-                <button type="submit" id="searchNews"   class="btn btn-success">搜索一下新闻</button>
+                <button type="submit" id="searchNews" class="btn btn-success">搜索一下新闻</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -110,18 +110,18 @@
                     <span class="sr-only">(current)</span></a></li>
 
                 <c:forEach items="${categoryLists}" var="clist">
-                    <li><a href="/?categoryId=${clist.id}"> ${clist.name} </a></li>
+                <li><a href="/?categoryId=${clist.id}"> ${clist.name} </a></li>
                 </c:forEach>
 
-            <ul class="nav nav-sidebar">
-                <li><a href="#"> 管理系统</a></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <ul class="nav nav-sidebar">
+                    <li><a href="#"> 管理系统</a></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
 
 
-            </ul>
+                </ul>
         </div>
 
         <nav aria-label="Page navigation">
@@ -134,57 +134,49 @@
                     <div id="content" class="panel-heading">
                     </div>
 
-                        <c:if test="${!empty articleLists}">
+                    <c:if test="${!empty articleLists}">
                         <c:forEach items="${articleLists}" var="list" varStatus="i">
                             <p>
                                 <a href="">${i.count} ${list.title} ${list.summary}&nbsp;&nbsp;&nbsp;<small> ${list.modifyDate}</small>
                                     &nbsp; &nbsp;&nbsp;&nbsp;${cid.name}</a></p>
 
                         </c:forEach>
-                            <hr/>
-                            <hr/>
-                            <a href="/?currPage=${currPage-1}&categoryId=${cid.id }">[上一页]</a>
-                            <c:choose>
-                            <c:when test="${pageCounts>=3&&currPage<=3}"><c:forEach  begin="1" end="3" step="1" var="i2">
-                                    <a href="/?currPage=${i2}&categoryId=${cid.id }">[第${i2}页]</a>
-                                </c:forEach>
+                        <hr/>
+                        <hr/>
+                     <c:if test="${currPage>1}">
+                         <a href="/?currPage=${currPage-1}&categoryId=${cid.id }">[上一页]</a>
+                     </c:if>
+
+                        <c:choose>
+                            <c:when test="${pageCounts<=5}">
+                                <c:set var="begin" value="1"/>
+                                <c:set var="end" value="${pageCounts}"/>
                             </c:when>
-                                <c:when test="${currPage>pageCounts-3}">
-                                    <c:forEach begin="${pageCounts-2}" end="${pageCounts}" step="1" var="i3">
-                                        <a href="/?currPage=${i3}&categoryId=${cid.id }">[第${i3}页]</a>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach begin="${currPage-1}" end="${currPage+1}" step="1" var="i4">
-                                        <a href="/?currPage=${i4}&categoryId=${cid.id }">[第${i4}页]</a>
-                                    </c:forEach>
+                            <c:otherwise>
+                                <c:set var="begin" value="${currPage-1}"/>
+                                <c:set var="end" value="${currPage+3}"/>
+                                <c:if test="${begin<=1}">
+                                    <c:set var="begin" value="1"/>
+                                    <c:set var="end" value="5"/>
+                                </c:if>
+                                <c:if test="${end>=pageCounts}">
+                                    <c:set var="end" value="${pageCounts}"/>
+                                    <c:set var="begin" value="${pageCounts-4}"/>
+                                </c:if>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:forEach var="getPageNum" begin="${begin}" end="${end}" step="1">
+                            <a href="/?currPage=${getPageNum}&categoryId=${cid.id }">[第${getPageNum}页]</a>
+                        </c:forEach>
 
-                                </c:otherwise>
-                            </c:choose>
-                           <%-- <c:when test="${currPage}>=${pageCounts}">
-                                <c:forEach var="p2" begin="${currPage-1}" end="${pageCounts}" step="1" >
-                                    <a href="/?currPage=${p2}&categoryId=${cid.id }">第${p2}页</a>
-                                </c:forEach>
-
-                            </c:when>--%>
-
-                             <%--   <c:forEach var="i" begin="1" end="${pageCounts}" step="1">
-                                    <a href="/?currPage=${i}&categoryId=${cid.id }">第${i}页</a>
-
-                                </c:forEach>--%>
-
-
-
-
-                            <a href="/?currPage=${currPage+1}&categoryId=${cid.id }">[下一页]</a>
-                            <a href="/?currPage=-1&categoryId=${cid.id }">测试</a>
-                            <span>>>>>>当前第${currPage}页</span>
-                            <span>总共${pageCounts}页</span>
+                       <c:if test="${currPage<pageCounts}"> <a href="/?currPage=${currPage+1}&categoryId=${cid.id }">[下一页]</a>
+                       </c:if>
+                        <a href="/?currPage=1&categoryId=${cid.id }">首页</a>
+                        <a href="/?currPage=${pageCounts}&categoryId=${cid.id }">尾页</a>
+                        <span>>>>>>当前第${currPage}页</span>
+                        <span>总共${pageCounts}页</span>
 
                     </c:if>
-
-
-
 
 
                 </div>
@@ -265,7 +257,6 @@
         })
 
 
-
     })
     $(document).ready(function () {
         $("#logout").click(function () {
@@ -323,10 +314,10 @@ $(document).change(function () {
     })
 })
 $("#-searchNews").click(function () {
-        window.location.href='/'
+    window.location.href = '/'
 
 
-    })
+})
 
 </script>
 
